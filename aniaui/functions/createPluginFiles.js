@@ -44,13 +44,31 @@ export const createPluginFilesComponent = async (type, componentDir, jsContent, 
 
   // create index.js
   const indexJsPath = path.join(componentDir, "index.js")
-  const indexJsContent = `import ${fileName} from './${objName}';
-import { addPrefix } from '../../functions/addPrefix.js';
+  const indexJsContent = `
+    const fs = require("fs");
+    const path = require("path");
+    import { addPrefix } from '../../functions/addPrefix.js';
 
-export default ({ ${types[type]}, prefix = '', style = 'basic' }) => {
-  const prefixed${fileName} = addPrefix(${fileName}, prefix);
-  ${types[type]}({ ...prefixed${fileName} });
-};
-`
+    const styles = [
+      {'name': "basic", 'file': "./object.js"},
+      {'name': "neumorphism", 'file': "./object.neu.js"},
+      {'name': "old", 'file': "./object.old.js"},
+    ];
+
+    export default ({ addComponents, prefix = '', style = 'basic' }) => {
+      for (const st of styles)
+      {
+        const filePath = path.resolve(__dirname, st.file); // Convertir en chemin absolu
+        if (st.name === style && fs.existsSync(filePath))
+        {
+          let obj = require(st.file);
+          obj = obj.default || obj
+          const prefixedobj = addPrefix(obj, prefix);
+          addComponents({ ...prefixedobj });
+        }
+      }
+    };
+  `
+
   await fs.writeFile(indexJsPath, indexJsContent)
 }
