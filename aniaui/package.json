@@ -1,0 +1,43 @@
+{
+  "name": "aniaui",
+  "version": "1.0.0",
+  "description": "CSS UI (plugin tailwind) and auto inject js",
+  "type": "module",
+  "author": "swotex",
+  "license": "ISC",
+  "main": "./index.js",
+  "module": "./index.js",
+  "files": [
+    "base",
+    "colors",
+    "components",
+    "!components/*/class.json",
+    "functions/addPrefix.js",
+    "functions/plugin.js",
+    "functions/pluginOptionsHandler.js",
+    "functions/themeOrder.js",
+    "functions/variables.js",
+    "theme",
+    "utilities",
+    "imports.js",
+    "index.js",
+    "chunks.css",
+    "aniaui.css",
+    "themes.css"
+  ],
+  "scripts": {
+    "init": "npm install && npm run build",
+    "build": "bun build.js"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.0.9",
+    "@tailwindcss/vite": "^4.0.9",
+    "lightningcss": "^1.29.1",
+    "postcss": "^8.5.3",
+    "postcss-js": "^4.0.1",
+    "postcss-selector-parser": "^7.1.0",
+    "prettier": "^3.5.2",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "tailwindcss": "^4.0.9"
+  }
+}
