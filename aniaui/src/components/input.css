@@ -1,4 +1,4 @@
-/* .input {
+.input {
 	cursor: text;
 	border: var(--border) solid #0000;
 	@apply bg-base-100 inline-flex shrink appearance-none items-center gap-2 px-3 align-middle whitespace-nowrap;
@@ -193,6 +193,6 @@
 		@apply -my-4 -me-3;
 	  }
 	}
-  } */
+  }
 
 
