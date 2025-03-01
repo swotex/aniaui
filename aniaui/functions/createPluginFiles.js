@@ -58,7 +58,7 @@ export const createPluginFilesComponent = async (type, componentDir, jsContent, 
     export default ({ addComponents, prefix = '', style = 'basic' }) => {
       for (const st of styles)
       {
-        const filePath = path.resolve(__dirname, st.file); // Convertir en chemin absolu
+        const filePath = path.resolve(__dirname, st.file);
         if (st.name === style && fs.existsSync(filePath))
         {
           let obj = require(st.file);

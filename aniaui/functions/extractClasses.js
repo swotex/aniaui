@@ -16,13 +16,46 @@ const extractClassNames = async (cssContent) => {
   return [...new Set(classNames)] // Remove duplicates
 }
 
+
+const fileExists = async (filePath) => {
+  try {
+    await fs.access(filePath);
+    console.log(filePath, " : already exists");
+    return true;
+  } catch {
+    console.log(filePath, " : does not exist");
+    return false;
+  }
+}
+
+// Function to read if file already exist and merge both
+const updateFile = async (path, classNames) => {
+  let fileContent;
+  if (await fileExists(path))
+  {
+    fileContent = await fs.readFile(path, "utf8");
+    fileContent = JSON.parse(fileContent);
+    // console.log("i've : ", fileContent, " and second one : ", classNames)
+    if (Array.isArray(fileContent))
+      fileContent = [...new Set([...fileContent, ...classNames])];
+    else
+      fileContent = classNames;
+  }
+  else
+    fileContent = classNames;
+
+  fileContent = JSON.stringify(fileContent, null, 2)
+  // console.log("The result : ", fileContent)
+  await fs.writeFile(path, fileContent)
+}
+
 // Function to process a single CSS file
 const processCssFile = async (srcDir, filePath) => {
   try {
     const cssContent = await fs.readFile(filePath, "utf8")
     const classNames = await extractClassNames(cssContent)
 
-    const fileName = path.basename(filePath, ".css")
+    const fileName = path.basename(filePath, ".css").split(".")[0]
     const outputDir = path.join(import.meta.dirname, "..", srcDir, fileName)
     const outputFilePath = path.join(outputDir, "class.json")
 
@@ -34,10 +67,17 @@ const processCssFile = async (srcDir, filePath) => {
     }
 
     // Create JSON string
-    const jsonString = JSON.stringify(classNames, null, 2)
+    // const jsonString = JSON.stringify(classNames, null, 2)
+
+    // if (await fileExists(outputFilePath)){
+    //   console.log(outputFilePath, " : already exist")
+    //   return;
+    // }
 
     // Write to a new JSON file
-    await fs.writeFile(outputFilePath, jsonString)
+    // await fs.writeFile(outputFilePath, jsonString)
+
+    await updateFile(outputFilePath, classNames)
 
     return classNames.length
   } catch (error) {
@@ -50,22 +90,51 @@ export const extractClasses = async ({ srcDir }) => {
   try {
     // Read all CSS files from the styles directory
     const stylesDir = path.join(import.meta.dirname, "..", "src", srcDir)
-    const cssFiles = await fs.readdir(stylesDir)
+    const cssFiles = await fs.readdir(stylesDir, {recursive: true})
     const filteredCssFiles = cssFiles.filter((file) => file.endsWith(".css"))
 
     if (filteredCssFiles.length === 0) {
       throw new Error("No CSS files found in the specified directory")
     }
 
-    // Process each CSS file and sum up the total number of class names
+    // filteredCssFiles = filteredCssFiles.sort()
+    const justFile = filteredCssFiles.filter(file => !file.includes('/'));
+    let subDirFile = filteredCssFiles.filter(file => file.includes('/'));
+
+    subDirFile = subDirFile.reduce((groups, file) => {
+      const folder = file.split('/')[0];
+
+      if (!groups[folder]) {
+        groups[folder] = [];
+      }
+      groups[folder].push(file);
+    
+      return groups;
+    }, {});
+
+    subDirFile = Object.values(subDirFile);
+
+    // Create async create orphan file
     const classNameCounts = await Promise.all(
-      filteredCssFiles.map(async (file) => {
+      justFile.map(async (file) => {
         const filePath = path.join(stylesDir, file)
         return await processCssFile(srcDir, filePath)
       }),
     )
 
-    const totalClassNames = classNameCounts.reduce((total, count) => total + count, 0)
+    const classNameCountsGroup = await Promise.all(
+      subDirFile.map(async (fileGroup) => {
+        let nbItems = 0;
+        for (const file of fileGroup){
+          const filePath = path.join(stylesDir, file)
+          nbItems += await processCssFile(srcDir, filePath)
+        }
+        return nbItems;
+      }),
+    )
+
+    let totalClassNames = classNameCounts.reduce((total, count) => total + count, 0)
+    totalClassNames += classNameCountsGroup.reduce((total, count) => total + count, 0)
 
     return totalClassNames
   } catch (error) {
