@@ -20,10 +20,8 @@ const extractClassNames = async (cssContent) => {
 const fileExists = async (filePath) => {
   try {
     await fs.access(filePath);
-    console.log(filePath, " : already exists");
     return true;
   } catch {
-    console.log(filePath, " : does not exist");
     return false;
   }
 }
@@ -35,7 +33,6 @@ const updateFile = async (path, classNames) => {
   {
     fileContent = await fs.readFile(path, "utf8");
     fileContent = JSON.parse(fileContent);
-    // console.log("i've : ", fileContent, " and second one : ", classNames)
     if (Array.isArray(fileContent))
       fileContent = [...new Set([...fileContent, ...classNames])];
     else
@@ -45,7 +42,6 @@ const updateFile = async (path, classNames) => {
     fileContent = classNames;
 
   fileContent = JSON.stringify(fileContent, null, 2)
-  // console.log("The result : ", fileContent)
   await fs.writeFile(path, fileContent)
 }
 
@@ -65,17 +61,6 @@ const processCssFile = async (srcDir, filePath) => {
     } catch (err) {
       if (err.code !== "EEXIST") throw err
     }
-
-    // Create JSON string
-    // const jsonString = JSON.stringify(classNames, null, 2)
-
-    // if (await fileExists(outputFilePath)){
-    //   console.log(outputFilePath, " : already exist")
-    //   return;
-    // }
-
-    // Write to a new JSON file
-    // await fs.writeFile(outputFilePath, jsonString)
 
     await updateFile(outputFilePath, classNames)
 
@@ -97,7 +82,6 @@ export const extractClasses = async ({ srcDir }) => {
       throw new Error("No CSS files found in the specified directory")
     }
 
-    // filteredCssFiles = filteredCssFiles.sort()
     const justFile = filteredCssFiles.filter(file => !file.includes('/'));
     let subDirFile = filteredCssFiles.filter(file => file.includes('/'));
 
