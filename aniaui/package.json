@@ -17,6 +17,7 @@
     "functions/pluginOptionsHandler.js",
     "functions/themeOrder.js",
     "functions/variables.js",
+    "functions/styleList.json",
     "theme",
     "utilities",
     "imports.js",

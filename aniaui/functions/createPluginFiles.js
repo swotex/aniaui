@@ -48,12 +48,13 @@ export const createPluginFilesComponent = async (type, componentDir, jsContent, 
     const fs = require("fs");
     const path = require("path");
     import { addPrefix } from '../../functions/addPrefix.js';
+    import styles from '../../functions/styleList.json';
 
-    const styles = [
-      {'name': "basic", 'file': "./object.js"},
-      {'name': "neumorphism", 'file': "./object.neu.js"},
-      {'name': "old", 'file': "./object.old.js"},
-    ];
+    // const styles = [
+    //   {'name': "basic", 'file': "./object.js"},
+    //   {'name': "neumorphism", 'file': "./object.neu.js"},
+    //   {'name': "old", 'file': "./object.old.js"},
+    // ];
 
     export default ({ addComponents, prefix = '', style = 'basic' }) => {
       for (const st of styles)

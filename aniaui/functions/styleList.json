@@ -1,0 +1,6 @@
+[
+	{"name": "basic", "file": "./object.js"},
+	{"name": "neumorphism", "file": "./object.neu.js"},
+	{"name": "old", "file": "./object.old.js"},
+	{"name": "daisy5", "file": "./object.dsy5.js"}
+]
