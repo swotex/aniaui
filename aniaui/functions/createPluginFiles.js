@@ -44,7 +44,7 @@ export const createPluginFilesComponent = async (type, componentDir, jsContent, 
 
   // create index.js
   const indexJsPath = path.join(componentDir, "index.js")
-  const indexJsContent = `
+  const indexJsContent = `\
   const fs = require("fs");
   const path = require("path");
   import { addPrefix } from '../../functions/addPrefix.js';
