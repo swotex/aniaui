@@ -1,0 +1,31 @@
+.input
+{
+	@apply bg-base-100 inline-flex whitespace-nowrap items-center gap-2 px-3 outline-none text-white border-none transition-colors duration-100 border-solid;
+	width: clamp(3rem, 20rem, 100%);
+	height: var(--size);
+	font-size: 0.875rem;
+	border-start-start-radius: var(--join-ss, var(--radius-field));
+	border-start-end-radius: var(--join-se, var(--radius-field));
+	border-end-start-radius: var(--join-es, var(--radius-field));
+	border-end-end-radius: var(--join-ee, var(--radius-field));
+	border-color: var(--input-color);
+	--size: calc(var(--size-field, 0.25rem) * 10);
+	--input-color: color-mix(in oklab, var(--color-base-content) 20%, #0000);
+
+
+
+
+	border-radius: 6px;
+	box-shadow: 3px 3px 10px rgba(0,0,0,1),
+	-1px -1px 6px rgba(255, 255, 255, 0.4);
+
+
+	&:focus,
+	&:focus-within{
+		border: 2px solid transparent;
+		box-shadow: 3px 3px 10px rgba(0,0,0,1),
+		-1px -1px 6px rgba(255, 255, 255, 0.4),
+		inset 3px 3px 10px rgba(0,0,0,1),
+		inset -1px -1px 6px rgba(255, 255, 255, 0.4);
+	}
+}

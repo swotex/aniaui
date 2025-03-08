@@ -22,6 +22,12 @@
 		top: 0;
 		transform: translateY(-60%);
 	}
+	/* &:has(input:focus) .input-on-label,
+	&:has(input:valid) .input-on-label{
+		opacity: 100;
+		top: 0;
+		transform: translateY(-60%);
+	} */
 }
 
 .input-on-label{
@@ -31,7 +37,13 @@
     transition-timing-function: ease;
 	transition-duration: 200ms;
 	background-color: var(--color-base-100);
+
+	&.static {
+		@apply absolute left-[0.5em] px-1 top-0 opacity-100;
+		transform: translateY(-60%);
+	}
 }
+
 /* --- */
 
 .input-neutral {
