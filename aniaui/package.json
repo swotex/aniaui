@@ -28,7 +28,8 @@
   ],
   "scripts": {
     "init": "npm install && npm run build",
-    "build": "bun build.js"
+    "build": "bun build.js",
+    "clean": "rm -rf node_modules package-lock.json imports.js utilities theme components base"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.0.9",

@@ -7,7 +7,11 @@
   ],
   "scripts": {
     "build": "cd aniaui && bun run build",
-    "build:dev": "cd aniaui && bun run build --dev"
+    "build:dev": "cd aniaui && bun run build --dev",
+    "dev:demo": "npm run build:dev && cd webdemo && npm run dev",
+    "clean": "rm -rf node_modules package-lock.json",
+    "clean:all": "npm run clean && cd webdemo && npm run clean && cd ../aniaui && npm run clean"
+
   },
   "author": "",
   "license": "ISC",
